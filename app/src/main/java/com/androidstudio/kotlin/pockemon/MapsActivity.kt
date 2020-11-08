@@ -1,6 +1,10 @@
 package com.androidstudio.kotlin.pockemon
 
+import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -49,6 +53,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     fun getUserLocation(){
         Toast.makeText(this,"User location access on.",Toast.LENGTH_LONG).show()
+
+        var myLocation = MyLocationListner()
+        var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3,3f,myLocation)
     }
 
     override fun onRequestPermissionsResult(
@@ -90,5 +98,44 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             .snippet("Here is my location")
             .icon(BitmapDescriptorFactory.fromResource(R.drawable.mario)))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,14f))
+    }
+    var location:Location?=null
+
+    inner class MyLocationListner:LocationListener{
+
+
+
+        constructor(){
+            location = Location("start")
+            location!!.longitude = 0.0
+            location!!.latitude = 0.0
+        }
+
+        override fun onLocationChanged(Location: Location) {
+            location = Location
+        }
+
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+            //super.onStatusChanged(provider, status, extras)
+        }
+
+        override fun onProviderEnabled(provider: String) {
+           // super.onProviderEnabled(provider)
+        }
+
+        override fun onProviderDisabled(provider: String) {
+           //super.onProviderDisabled(provider)
+        }
+    }
+
+    inner class myThread:Thread{
+
+        constructor():super(){
+
+        }
+
+        override fun run() {
+
+        }
     }
 }
