@@ -1,7 +1,12 @@
 package com.androidstudio.kotlin.pockemon
 
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -15,6 +20,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
+    var ACCESS_LOCATION = 123
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,6 +29,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        checkPermission()
+    }
+
+    /**
+     * @see checkPermission
+     * REQUEST LOCATION ACCESS FROM USER
+     */
+    fun checkPermission(){
+        if(Build.VERSION.SDK_INT>=23){
+            if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.ACCESS_FINE_LOCATION)!=PackageManager.PERMISSION_GRANTED){
+                requestPermissions(arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),ACCESS_LOCATION)
+                return
+            }
+        }
+        getUserLocation()
+    }
+
+    fun getUserLocation(){
+        Toast.makeText(this,"User location access on.",Toast.LENGTH_LONG).show()
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     /**
