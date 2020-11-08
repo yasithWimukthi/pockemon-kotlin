@@ -56,6 +56,17 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
+        when(requestCode){
+            ACCESS_LOCATION->{
+                if(grantResults[0]==PackageManager.PERMISSION_GRANTED){
+                    getUserLocation()
+                }
+                else{
+                    Toast.makeText(this,"We can not access your location.",Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
