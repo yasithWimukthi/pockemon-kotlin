@@ -57,6 +57,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         var myLocation = MyLocationListner()
         var locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,3,3f,myLocation)
+
+        var myThread = myThread()
+        myThread.start()
     }
 
     override fun onRequestPermissionsResult(
@@ -90,14 +93,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
-        // Add a marker in Sydney and move the camera
-        val sydney = LatLng(-34.0, 151.0)
-        mMap.addMarker(MarkerOptions()
-            .position(sydney)
-            .title("Me")
-            .snippet("Here is my location")
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.mario)))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,14f))
     }
     var location:Location?=null
 
@@ -135,7 +130,25 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         override fun run() {
+            while(true){
 
+                try {
+                    runOnUiThread {
+                        // Add a marker in Sydney and move the camera
+                        mMap.clear()
+                        val sydney = LatLng(location!!.latitude, location!!.longitude)
+                        mMap.addMarker(MarkerOptions()
+                            .position(sydney)
+                            .title("Me")
+                            .snippet("Here is my location")
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.mario)))
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,14f))
+                    }
+                    Thread.sleep(1000)
+                }catch (err:Exception){
+
+                }
+            }
         }
     }
 }
