@@ -151,4 +151,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
     }
+
+    var pockemonList = ArrayList<Pockemon>()
+
+    fun loadPockemon(){
+        pockemonList.add(Pockemon("Charmander",
+            "Here is from Japan",
+            R.drawable.charmander,
+            55.0,
+            33.77,-122.0))
+    }
 }
