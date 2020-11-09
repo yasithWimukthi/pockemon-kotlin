@@ -49,6 +49,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         getUserLocation()
+        loadPockemon()
     }
 
     fun getUserLocation(){
@@ -143,6 +144,21 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             .snippet("Here is my location")
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.mario)))
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney,14f))
+
+                        // show pockemons
+                        for (i in 0..pockemonList.size-1){
+                            var newPockemon = pockemonList[i]
+
+                            if (!newPockemon.isCatch!!){
+                                val packemonLoc = LatLng(newPockemon.lat!!,newPockemon.log!!)
+                                mMap.addMarker(MarkerOptions()
+                                    .position(packemonLoc )
+                                    .title(newPockemon.name!!)
+                                    .snippet(newPockemon.des!!)
+                                    .icon(BitmapDescriptorFactory.fromResource(newPockemon.image!!)))
+
+                            }
+                        }
                     }
                     Thread.sleep(1000)
                 }catch (err:Exception){
@@ -155,10 +171,24 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     var pockemonList = ArrayList<Pockemon>()
 
     fun loadPockemon(){
-        pockemonList.add(Pockemon("Charmander",
+        pockemonList.add(
+            Pockemon("Charmander",
             "Here is from Japan",
             R.drawable.charmander,
             55.0,
-            33.77,-122.0))
+            37.7789994893035,-122.401846647263)
+        )
+
+        pockemonList.add(Pockemon("Bulbasaur",
+            "Bulbasaur living in USA",
+            R.drawable.bulbasaur,
+            90.5,
+            37.7949568502667,-122.410494089127))
+
+        pockemonList.add(Pockemon("Squirtle",
+            "Squirtle living in Iraq",
+            R.drawable.squirtle,
+            33.5,
+            37.7816621152613,-122.41225361824))
     }
 }
