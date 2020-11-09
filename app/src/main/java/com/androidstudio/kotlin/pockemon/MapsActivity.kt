@@ -124,16 +124,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    var oldLocation:Location?=null
     inner class myThread:Thread{
 
         constructor():super(){
-
+            oldLocation = Location("start")
+            oldLocation!!.longitude = 0.0
+            oldLocation!!.latitude = 0.0
         }
 
         override fun run() {
             while(true){
 
                 try {
+
+                    if(oldLocation!!.distanceTo(location)==0f){
+                        continue
+                    }
+
+                    oldLocation = location
+
                     runOnUiThread {
                         // Add a marker in Sydney and move the camera
                         mMap.clear()
