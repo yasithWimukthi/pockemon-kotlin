@@ -160,13 +160,22 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                             var newPockemon = pockemonList[i]
 
                             if (!newPockemon.isCatch!!){
-                                val packemonLoc = LatLng(newPockemon.lat!!,newPockemon.log!!)
+                                val packemonLoc = LatLng(newPockemon.location!!.latitude,newPockemon.location!!.longitude)
                                 mMap.addMarker(MarkerOptions()
                                     .position(packemonLoc )
                                     .title(newPockemon.name!!)
-                                    .snippet(newPockemon.des!!)
+                                    .snippet(newPockemon.des!!+" power : "+newPockemon.power!!)
                                     .icon(BitmapDescriptorFactory.fromResource(newPockemon.image!!)))
 
+                                if (location!!.distanceTo(newPockemon.location)>2){
+                                    newPockemon.isCatch = true
+                                    pockemonList[i] = newPockemon
+                                    playerPower += newPockemon.power!!
+
+                                    Toast.makeText(applicationContext,
+                                        "You catch new pockemon your new power is : " + playerPower,
+                                        Toast.LENGTH_LONG).show()
+                                }
                             }
                         }
                     }
@@ -178,6 +187,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
+    var playerPower = 0.0
     var pockemonList = ArrayList<Pockemon>()
 
     fun loadPockemon(){
